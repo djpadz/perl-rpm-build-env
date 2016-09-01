@@ -28,7 +28,7 @@ use strict;
 use warnings;
 use Getopt::Long;
 use Sys::Hostname;
-use Pod::Text;
+use Pod::PlainText;
 
 my ($ME, $RPM, $TMPDIR, %RPMDIR, $CWD, %info, %meta, $ARGS);
 
@@ -359,7 +359,7 @@ sub get_mod {
 
 sub get_meta {
     my $info = shift || $_; local $_;
-    my $pod = Pod::Text->new();
+    my $pod = Pod::PlainText->new();
 
     print "Metadata retrieval\n";
 
