@@ -1,0 +1,13 @@
+#!/bin/bash
+
+IMAGE='rpmbuild:latest'
+
+cd ${BASH_SOURCE%/*}
+build_temp=/tmp/dbuild.$$
+docker build . | tee $build_temp || exit $?
+h=$(tail -1 $build_temp | fgrep 'Successfully built' | awk '{print $3}')
+[[ -z $h ]] && exit 1
+docker tag $IMAGE tmptmptmp:latest
+docker rmi $IMAGE
+docker tag $h $IMAGE
+docker rmi tmptmptmp:latest
