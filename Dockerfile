@@ -6,16 +6,14 @@ ENTRYPOINT [ "/bin/bash", "-l" ]
 
 WORKDIR "/root"
 
-RUN yum install -y perl-CPAN perl-libwww-perl rpm-build openssh-clients tar perl-YAML perl-IO-Socket-SSL perl-parent perl-Readonly gcc gcc-c++ openssl-devel
-
-RUN \
-	echo yes | cpan; \
-	perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
-
-RUN cpan Test::More Pod::PlainText Getopt::ArgvFile
-
-RUN cpan Crypt::OpenSSL::RSA JSON::XS Date::Parse Types::Serialiser FreezeThaw
+RUN yum install -y rpm-build openssh-clients tar gcc gcc-c++ openssl-devel perl-*
 
 ADD root/ /
 
+RUN cpan Test::More Pod::PlainText Getopt::ArgvFile Bundle::CPAN JSON::XS
+
+RUN useradd -N -M -d /Users/djpadz djpadz
+
 RUN mkdir -p /root/rpm/SRPMS /root/rpm/BUILD /root/rpm/SOURCES /root/rpm/SPECS /root/rpm/RPMS
+
+RUN ln -s /root/rpm/RPMS /RPMS
